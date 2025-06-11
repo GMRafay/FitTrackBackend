@@ -5,10 +5,19 @@ import { WorkoutdayModule } from './workoutday/workoutday.module';
 
 import { ExerciseModule } from './exercise/exercise.module';
 import { PrismaModule } from './prisma/prisma.module';
-
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [AuthModule, UserModule, WorkoutdayModule,ExerciseModule, PrismaModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    AuthModule,
+    UserModule,
+    WorkoutdayModule,
+    ExerciseModule,
+    PrismaModule,
+  ],
   controllers: [],
   providers: [],
 })
