@@ -25,6 +25,8 @@ model User {
   lastName  String?
 
   workoutDays WorkoutDay[]
+
+  @@map("users")
 }
 
 model WorkoutDay {
@@ -37,6 +39,8 @@ model WorkoutDay {
   user      User       @relation(fields: [userId], references: [id])
   userId    Int
   exercises Exercise[]
+
+  @@map("workoutdays")
 }
 
 model Exercise {
@@ -49,6 +53,8 @@ model Exercise {
   workoutDay   WorkoutDay    @relation(fields: [workoutDayId], references: [id])
   workoutDayId Int
   sets         ExerciseSet[]
+
+  @@map("exercises")
 }
 
 model ExerciseSet {
@@ -61,4 +67,6 @@ model ExerciseSet {
   weight     Float?
   exerciseId Int
   exercise   Exercise @relation(fields: [exerciseId], references: [id])
+
+  @@map("exercisesets")
 }
