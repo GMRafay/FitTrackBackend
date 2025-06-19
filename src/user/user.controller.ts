@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { JwtGuard } from '../../src/auth/guard';
@@ -12,4 +12,8 @@ export class UserController {
   getMe(@GetUser() user: User) {
     return user;
   }
+
+  
+  @Patch('update')
+  editUser() {}
 }

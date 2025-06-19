@@ -36,7 +36,7 @@ model WorkoutDay {
 
   date      DateTime
   title     String
-  user      User       @relation(fields: [userId], references: [id])
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   exercises Exercise[]
 
@@ -50,7 +50,7 @@ model Exercise {
 
   title String
 
-  workoutDay   WorkoutDay    @relation(fields: [workoutDayId], references: [id])
+  workoutDay   WorkoutDay    @relation(fields: [workoutDayId], references: [id], onDelete: Cascade)
   workoutDayId Int
   sets         ExerciseSet[]
 
@@ -66,7 +66,7 @@ model ExerciseSet {
   reps       Int
   weight     Float?
   exerciseId Int
-  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
 
   @@map("exercisesets")
 }
