@@ -12,8 +12,4 @@ export class EditUserDto {
   @IsEmail()
   @IsOptional()
   email?: string;
-
-  @IsString()
-  @IsOptional()
-  password?: string;
 }
