@@ -34,7 +34,6 @@ model WorkoutDay {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  date      DateTime
   title     String
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int

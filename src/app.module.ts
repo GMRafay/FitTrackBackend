@@ -6,6 +6,7 @@ import { WorkoutdayModule } from './workoutday/workoutday.module';
 import { ExerciseModule } from './exercise/exercise.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
+import { ExercisesetModule } from './exerciseset/exerciseset.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ConfigModule } from '@nestjs/config';
     WorkoutdayModule,
     ExerciseModule,
     PrismaModule,
+    ExercisesetModule,
   ],
   controllers: [],
   providers: [],

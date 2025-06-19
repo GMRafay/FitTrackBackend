@@ -17,6 +17,7 @@ describe('App e2e', () => {
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
+        transform: true,
       }),
     );
     await app.init();
@@ -129,7 +130,9 @@ describe('App e2e', () => {
           .patch('/users')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .withBody(dto)
-          .expectStatus(200);
+          .expectStatus(200)
+          .expectBodyContains(dto.firstName)
+          .expectBodyContains(dto.email);
       });
     });
 
@@ -143,9 +146,9 @@ describe('App e2e', () => {
 
     describe('Get workout day by id', () => {});
 
-    describe('Edit workout day', () => {});
+    describe('Edit workout day by id', () => {});
 
-    describe('Delete workout day', () => {});
+    describe('Delete workout day by id', () => {});
   });
 
   describe('Exercise', () => {
