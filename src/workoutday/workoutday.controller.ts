@@ -10,10 +10,9 @@ import {
   Body,
 } from '@nestjs/common';
 import { JwtGuard } from '../auth/guard';
-import { PrismaService } from '../prisma/prisma.service';
 import { WorkoutdayService } from './workoutday.service';
 import { GetUser } from '../auth/decorator';
-import { CreateWorkoutDayDto } from './dto';
+import { CreateWorkoutDayDto, EditWorkoutDayDto } from './dto';
 
 @UseGuards(JwtGuard)
 @Controller('workoutday')
@@ -27,17 +26,30 @@ export class WorkoutdayController {
   createWorkoutDay(
     @GetUser('id') userId: number,
     @Body() dto: CreateWorkoutDayDto,
-  ) {}
+  ) {
+    return this.workoutdayService.createWorkoutDay(userId, dto);
+  }
 
   @Get(':id')
   getWorkoutDayById(
     @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) workoutdayId: number,
-  ) {}
+  ) {
+    return this.workoutdayService.getWorkoutDayById(userId, workoutdayId);
+  }
 
   @Patch(':id')
-  editworkoutDayById(@GetUser('id') userId: number) {}
+  editworkoutDayById(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) workoutdayId: number,
+    dto: EditWorkoutDayDto,
+  ) {
+    return this.workoutdayService.editworkoutDayById(userId, workoutdayId, dto);
+  }
 
   @Delete(':id')
-  deleteWorkoutDayById(@GetUser('id') userId: number) {}
+  deleteWorkoutDayById(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) workoutdayId: number,
+  ) {}
 }
