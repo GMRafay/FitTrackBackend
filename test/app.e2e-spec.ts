@@ -7,6 +7,8 @@ import { AuthDto } from '../src/auth/dto';
 import { EditUserDto } from 'src/user/dto';
 import { CreateWorkoutDayDto } from '../src/workoutday/dto/create-workoutday.dto';
 import { EditWorkoutDayDto } from '../src/workoutday/dto';
+import { Exercise } from '@prisma/client';
+import { CreateExerciseDto } from '../src/exercise/dto';
 describe('App e2e', () => {
   let app: INestApplication;
   let prisma: PrismaService;
@@ -207,12 +209,54 @@ describe('App e2e', () => {
           .inspect();
       });
     });
+
+    describe('Create workout day again to use for exercises', () => {
+      const dto: CreateWorkoutDayDto = {
+        title: 'Leg Day June 20',
+      };
+      it('Should create a workout day', () => {
+        return pactum
+          .spec()
+          .post('/workoutday')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody(dto)
+          .expectStatus(201)
+          .expectBodyContains(dto.title)
+          .stores('workoutDayId', 'id');
+      });
+    });
   });
 
   describe('Exercise', () => {
-    describe('Create exercise', () => {});
+    describe('Create exercise', () => {
+      const dto: CreateExerciseDto = {
+        title: 'Squat',
+      };
+      it('should create an exercise', () => {
+        return pactum
+          .spec()
+          .post('/workoutday/{id}/exercise')
+          .withPathParams('id', '$S{workoutDayId}')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody(dto)
+          .expectStatus(201)
+          .expectBodyContains(dto.title)
+          .stores('exerciseId', 'id');
+      });
+    });
 
-    describe('Get exercises', () => {});
+    describe('Get exercises', () => {
+      it('should get exercises', () => {
+        return pactum
+          .spec()
+          .get('/workoutday/{id}/exercise')
+          .withPathParams('id', '$S{workoutDayId}')
+          .withHeaders({ Authorization : ' Bearer $S{userAt}' })
+          .expectStatus(200)
+          .expectJsonLength(1)
+          .inspect();
+    });
+    });
 
     describe('Get exercise by id', () => {});
 

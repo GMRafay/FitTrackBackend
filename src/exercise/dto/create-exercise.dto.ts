@@ -6,8 +6,4 @@ export class CreateExerciseDto{
     @IsString()
     title: string;
 
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => CreateExerciseSetDto)
-    sets: CreateExerciseSetDto[];
 }

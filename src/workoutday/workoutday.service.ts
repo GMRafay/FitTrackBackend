@@ -31,16 +31,23 @@ export class WorkoutdayService {
   }
 
   async getWorkoutDayById(userId: number, workoutdayId: number) {
-    const workoutday = await this.prisma.workoutDay.findFirst({
-      where: {
-        id: workoutdayId,
-        userId: userId,
+    const day = await this.prisma.workoutDay.findUnique({
+      where: { id: workoutdayId },
+      include: {
+        exercises: {
+          orderBy: { createdAt: 'asc' },
+          include: {
+            sets: {
+              orderBy: { setNumber: 'asc' },
+            },
+          },
+        },
       },
     });
-    if (!workoutday) {
+    if (!day || day.userId !== userId) {
       throw new NotFoundException(`Workout day ${workoutdayId} not found`);
     }
-    return workoutday;
+    return day;
   }
 
   async editworkoutDayById(
