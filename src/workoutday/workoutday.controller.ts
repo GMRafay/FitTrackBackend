@@ -8,6 +8,7 @@ import {
   Param,
   ParseIntPipe,
   Body,
+  HttpCode,
 } from '@nestjs/common';
 import { JwtGuard } from '../auth/guard';
 import { WorkoutdayService } from './workoutday.service';
@@ -44,12 +45,13 @@ export class WorkoutdayController {
   editworkoutDayById(
     @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) workoutdayId: number,
-    dto: EditWorkoutDayDto,
+    @Body() dto: EditWorkoutDayDto,
   ) {
     return this.workoutdayService.editworkoutDayById(userId, workoutdayId, dto);
   }
 
   @Delete(':id')
+  @HttpCode(204)
   deleteWorkoutDayById(
     @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) workoutdayId: number,

@@ -15,7 +15,7 @@ export class WorkoutdayService {
         createdAt: 'desc',
       },
     });
-    
+
     return workoutdays;
   }
 
@@ -51,9 +51,9 @@ export class WorkoutdayService {
     // get the workout day by id
     const workoutday = await this.prisma.workoutDay.findFirst({
       where: {
-        id : workoutdayId,
-      }
-    }); 
+        id: workoutdayId,
+      },
+    });
     // check if workoutday belongs to the user
     if (!workoutday) {
       throw new NotFoundException(`Workout day ${workoutdayId} not found`);
@@ -71,7 +71,6 @@ export class WorkoutdayService {
       },
     });
     return updatedWorkoutDay;
-    
   }
 
   async deleteWorkoutDayById(userId: number, workoutdayId: number) {
@@ -96,9 +95,5 @@ export class WorkoutdayService {
         id: workoutdayId,
       },
     });
-    return {
-      message: `Workout day ${workoutdayId} deleted successfully`, 
-    };
-
   }
 }

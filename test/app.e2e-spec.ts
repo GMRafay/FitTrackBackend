@@ -6,6 +6,7 @@ import * as pactum from 'pactum';
 import { AuthDto } from '../src/auth/dto';
 import { EditUserDto } from 'src/user/dto';
 import { CreateWorkoutDayDto } from '../src/workoutday/dto/create-workoutday.dto';
+import { EditWorkoutDayDto } from '../src/workoutday/dto';
 describe('App e2e', () => {
   let app: INestApplication;
   let prisma: PrismaService;
@@ -164,16 +165,48 @@ describe('App e2e', () => {
           .get('/workoutday')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .expectStatus(200)
-          .expectJsonLength(1)
+          .expectJsonLength(1);
+      });
+    });
+
+    describe('Get workout day by id', () => {
+      it('should get workoutd day by id', () => {
+        return pactum
+          .spec()
+          .get('/workoutday/{id}')
+          .withPathParams('id', '$S{workoutDayId}')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .expectStatus(200)
           .inspect();
       });
     });
 
-    describe('Get workout day by id', () => {});
+    describe('Edit workout day by id', () => {
+      const dto: EditWorkoutDayDto = {
+        title: 'Leg Day June 21',
+      };
+      it('should edit workout day by id', () => {
+        return pactum
+          .spec()
+          .patch('/workoutday/{id}')
+          .withPathParams('id', '$S{workoutDayId}')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody(dto)
+          .expectStatus(200);
+      });
+    });
 
-    describe('Edit workout day by id', () => {});
-
-    describe('Delete workout day by id', () => {});
+    describe('Delete workout day by id', () => {
+      it('should delete orkoutday by id', () => {
+        return pactum
+          .spec()
+          .delete('/workoutday/{id}')
+          .withPathParams('id', '$S{workoutDayId}')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .expectStatus(204)
+          .inspect();
+      });
+    });
   });
 
   describe('Exercise', () => {
