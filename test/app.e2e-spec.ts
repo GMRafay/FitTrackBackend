@@ -5,6 +5,7 @@ import { PrismaService } from '../src/prisma/prisma.service';
 import * as pactum from 'pactum';
 import { AuthDto } from '../src/auth/dto';
 import { EditUserDto } from 'src/user/dto';
+import { CreateWorkoutDayDto } from '../src/workoutday/dto/create-workoutday.dto';
 describe('App e2e', () => {
   let app: INestApplication;
   let prisma: PrismaService;
@@ -140,9 +141,33 @@ describe('App e2e', () => {
   });
 
   describe('WorkoutDay', () => {
-    describe('Create workout day', () => {});
+    describe('Create workout day', () => {
+      const dto: CreateWorkoutDayDto = {
+        title: 'Leg Day June 20',
+      };
+      it('Should create a workout day', () => {
+        return pactum
+          .spec()
+          .post('/workoutday')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody(dto)
+          .expectStatus(201)
+          .expectBodyContains(dto.title)
+          .stores('workoutDayId', 'id');
+      });
+    });
 
-    describe('Get workout days', () => {});
+    describe('Get workout days', () => {
+      it('should get workout days', () => {
+        return pactum
+          .spec()
+          .get('/workoutday')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .expectStatus(200)
+          .expectJsonLength(1)
+          .inspect();
+      });
+    });
 
     describe('Get workout day by id', () => {});
 

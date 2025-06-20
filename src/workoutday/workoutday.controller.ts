@@ -20,7 +20,9 @@ export class WorkoutdayController {
   constructor(private workoutdayService: WorkoutdayService) {}
 
   @Get()
-  getWorkoutDays(@GetUser('id') userId: number) {}
+  getWorkoutDays(@GetUser('id') userId: number) {
+    return this.workoutdayService.getWorkoutDays(userId);
+  }
 
   @Post()
   createWorkoutDay(
@@ -51,5 +53,7 @@ export class WorkoutdayController {
   deleteWorkoutDayById(
     @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) workoutdayId: number,
-  ) {}
+  ) {
+    return this.workoutdayService.deleteWorkoutDayById(userId, workoutdayId);
+  }
 }
