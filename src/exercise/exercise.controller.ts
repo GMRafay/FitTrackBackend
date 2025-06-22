@@ -28,7 +28,20 @@ export class ExerciseController {
   ) {
     return this.exerciseService.getExercises(userId, workoutdayId);
   }
-  getExerciseById() {}
+
+  @UseGuards(JwtGuard)
+  @Get(':exerciseId')
+  getExerciseById(
+    @GetUser('id') userId: number,
+    @Param('workoutdayId', ParseIntPipe) workoutdayId: number,
+    @Param('exerciseId', ParseIntPipe) exerciseId: number,
+  ) {
+    return this.exerciseService.getExerciseById(
+      userId,
+      workoutdayId,
+      exerciseId,
+    );
+  }
   editExerciseById() {}
   deleteExerciseById() {}
 }

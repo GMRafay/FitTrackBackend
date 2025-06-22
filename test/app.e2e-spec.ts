@@ -178,8 +178,7 @@ describe('App e2e', () => {
           .get('/workoutday/{id}')
           .withPathParams('id', '$S{workoutDayId}')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
-          .expectStatus(200)
-          .inspect();
+          .expectStatus(200);
       });
     });
 
@@ -205,8 +204,7 @@ describe('App e2e', () => {
           .delete('/workoutday/{id}')
           .withPathParams('id', '$S{workoutDayId}')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
-          .expectStatus(204)
-          .inspect();
+          .expectStatus(204);
       });
     });
 
@@ -235,8 +233,8 @@ describe('App e2e', () => {
       it('should create an exercise', () => {
         return pactum
           .spec()
-          .post('/workoutday/{id}/exercise')
-          .withPathParams('id', '$S{workoutDayId}')
+          .post('/workoutday/{dayId}/exercise')
+          .withPathParams({ dayId: '$S{workoutDayId}' })
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .withBody(dto)
           .expectStatus(201)
@@ -249,16 +247,29 @@ describe('App e2e', () => {
       it('should get exercises', () => {
         return pactum
           .spec()
-          .get('/workoutday/{id}/exercise')
-          .withPathParams('id', '$S{workoutDayId}')
-          .withHeaders({ Authorization : ' Bearer $S{userAt}' })
+          .get('/workoutday/{dayId}/exercise')
+          .withPathParams({ dayId: '$S{workoutDayId}' })
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .expectStatus(200)
-          .expectJsonLength(1)
-          .inspect();
-    });
+          .expectJsonLength(1);
+      });
     });
 
-    describe('Get exercise by id', () => {});
+    describe('Get exercise by id', () => {
+      it('should get exercises by  their id', () => {
+        return pactum
+          .spec()
+          .get('/workoutday/{dayId}/exercise/{exerciseId}')
+          .withPathParams({
+            dayId: '$S{workoutDayId}',
+            exerciseId: '$S{exerciseId}',
+          })
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .expectStatus(200)
+          .expectBodyContains('$S{exerciseId}')
+          .inspect();
+      });
+    });
 
     describe('Edit exercise', () => {});
 

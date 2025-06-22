@@ -53,7 +53,32 @@ export class ExerciseService {
         });
         return exercises;
     }
-    getExerciseById() {}
+    async getExerciseById(userId: number, workoutdayId:number, exerciseId: number) {
+        // Check if workoutday exists and belongs to user
+        const workoutday = await this.prisma.workoutDay.findUnique({
+            where: {
+                id: workoutdayId,
+            },
+        });
+        if (!workoutday) {
+            throw new NotFoundException('Workout day not found');
+        }
+        if (workoutday.userId !== userId) {
+            throw new ForbiddenException('Workout day does not belong to user');
+        }
+        // Check if exercise exists in the workoutday
+        const exercise = await this.prisma.exercise.findUnique({
+            where: {
+                id: exerciseId,
+                workoutDayId: workoutdayId, // Ensure the exercise belongs to the specified workoutday
+            },
+        });
+        if (!exercise) {
+            throw new NotFoundException('Exercise not found');
+        }
+        return exercise;  // Return the found exercise
+        
+    }
     editExerciseById() {}
     deleteExerciseById() {}
 
