@@ -9,6 +9,7 @@ import { CreateWorkoutDayDto } from '../src/workoutday/dto/create-workoutday.dto
 import { EditWorkoutDayDto } from '../src/workoutday/dto';
 import { Exercise } from '@prisma/client';
 import { CreateExerciseDto } from '../src/exercise/dto';
+import { EditExerciseDto } from 'src/exercise/dto/edit-exercise.dto';
 describe('App e2e', () => {
   let app: INestApplication;
   let prisma: PrismaService;
@@ -271,7 +272,25 @@ describe('App e2e', () => {
       });
     });
 
-    describe('Edit exercise', () => {});
+    describe('Edit exercise by id ', () => {
+      const dto: EditExerciseDto = {
+        title: 'Deadlift',
+      };
+      it('should edit exercise by id', () => {
+        return pactum
+          .spec()
+          .patch('/workoutday/{dayId}/exercise/{exerciseId}')
+          .withPathParams({
+            dayId: '$S{workoutDayId}',
+            exerciseId: '$S{exerciseId}',
+          })
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody(dto)
+          .expectStatus(200)
+          .expectBodyContains(dto.title)
+          .expectBodyContains('$S{exerciseId}');
+      });
+    });
 
     describe('Delete exercise', () => {});
   });

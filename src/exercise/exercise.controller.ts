@@ -1,10 +1,11 @@
-import { Body, Controller, Param, ParseIntPipe } from '@nestjs/common';
+import { Body, Controller, Param, ParseIntPipe, Patch } from '@nestjs/common';
 import { ExerciseService } from './exercise.service';
 import { Post, Get } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
 import { JwtGuard } from '../auth/guard';
 import { CreateExerciseDto } from './dto';
 import { GetUser } from '../auth/decorator';
+import { EditExerciseDto } from './dto/edit-exercise.dto';
 @Controller('/workoutday/:workoutdayId/exercise')
 export class ExerciseController {
   constructor(private exerciseService: ExerciseService) {}
@@ -42,6 +43,20 @@ export class ExerciseController {
       exerciseId,
     );
   }
-  editExerciseById() {}
+  @UseGuards(JwtGuard)
+  @Patch(':exerciseId')
+  editExerciseById(
+    @GetUser('id') userId: number,
+    @Param('workoutdayId', ParseIntPipe) workoutdayId: number,
+    @Param('exerciseId', ParseIntPipe) exerciseId: number,
+    @Body() dto: EditExerciseDto,
+  ) {
+    return this.exerciseService.editExerciseById(
+      userId,
+      workoutdayId,
+      exerciseId,
+      dto,
+    );
+  }
   deleteExerciseById() {}
 }
