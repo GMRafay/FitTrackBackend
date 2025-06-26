@@ -10,6 +10,7 @@ import { EditWorkoutDayDto } from '../src/workoutday/dto';
 import { Exercise } from '@prisma/client';
 import { CreateExerciseDto } from '../src/exercise/dto';
 import { EditExerciseDto } from 'src/exercise/dto/edit-exercise.dto';
+import { CreateExerciseSetDto } from '../src/exerciseset/dto';
 describe('App e2e', () => {
   let app: INestApplication;
   let prisma: PrismaService;
@@ -267,8 +268,7 @@ describe('App e2e', () => {
           })
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .expectStatus(200)
-          .expectBodyContains('$S{exerciseId}')
-          .inspect();
+          .expectBodyContains('$S{exerciseId}');
       });
     });
 
@@ -292,11 +292,62 @@ describe('App e2e', () => {
       });
     });
 
-    describe('Delete exercise', () => {});
+    describe('Delete exercise by id ', () => {
+      it('should delete exercise by id', () => {
+        return pactum
+          .spec()
+          .delete('/workoutday/{dayId}/exercise/{exerciseId}')
+          .withPathParams({
+            dayId: '$S{workoutDayId}',
+            exerciseId: '$S{exerciseId}',
+          })
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .expectStatus(204);
+      });
+    });
+
+    describe('Create exercise again for exerciseSet tests', () => {
+      const dto: CreateExerciseDto = {
+        title: 'Squat',
+      };
+      it('should create an exercise', () => {
+        return pactum
+          .spec()
+          .post('/workoutday/{dayId}/exercise')
+          .withPathParams({ dayId: '$S{workoutDayId}' })
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody(dto)
+          .expectStatus(201)
+          .expectBodyContains(dto.title)
+          .stores('exerciseId', 'id');
+      });
+    });
+    
   });
 
   describe('ExerciseSet', () => {
-    describe('Create exercise set', () => {});
+    describe('Create exercise set', () => {
+      const dto: CreateExerciseSetDto = {
+        reps: 10,
+        setNumber: 1,
+        weight: 100,
+      };
+      it('should create an exercise set', () => {
+        return pactum
+          .spec()
+          .post('/workoutday/{dayId}/exercise/{exerciseId}/exerciseset')
+          .withPathParams({
+            dayId: '$S{workoutDayId}',
+            exerciseId: '$S{exerciseId}',
+          })
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody(dto)
+          .expectStatus(201)
+          .expectBodyContains(dto.setNumber.toString())
+          .expectBodyContains(dto.reps.toString())
+          .stores('exerciseSetId', 'id');
+      });
+    });
 
     describe('Get exercise sets', () => {});
 

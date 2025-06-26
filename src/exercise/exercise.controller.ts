@@ -1,4 +1,12 @@
-import { Body, Controller, Param, ParseIntPipe, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpCode,
+  Param,
+  ParseIntPipe,
+  Patch,
+} from '@nestjs/common';
 import { ExerciseService } from './exercise.service';
 import { Post, Get } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
@@ -58,5 +66,19 @@ export class ExerciseController {
       dto,
     );
   }
-  deleteExerciseById() {}
+
+  @Delete(':exerciseId')
+  @UseGuards(JwtGuard)
+  @HttpCode(204)
+  deleteExerciseById(
+    @GetUser('id') userId: number,
+    @Param('workoutdayId', ParseIntPipe) workoutdayId: number,
+    @Param('exerciseId', ParseIntPipe) exerciseId: number,
+  ) {
+    return this.exerciseService.deleteExerciseById(
+      userId,
+      workoutdayId,
+      exerciseId,
+    );
+  }
 }
