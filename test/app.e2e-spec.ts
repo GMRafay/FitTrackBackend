@@ -322,7 +322,6 @@ describe('App e2e', () => {
           .stores('exerciseId', 'id');
       });
     });
-    
   });
 
   describe('ExerciseSet', () => {
@@ -349,12 +348,54 @@ describe('App e2e', () => {
       });
     });
 
-    describe('Get exercise sets', () => {});
+    describe('Get exercise sets', () => {
+      it('Should get exercise sets', () => {
+        return pactum
+          .spec()
+          .get('/workoutday/{dayId}/exercise/{exerciseId}/exerciseset')
+          .withPathParams({
+            dayId: '$S{workoutDayId}',
+            exerciseId: '$S{exerciseId}',
+          })
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .expectStatus(200)
+          .expectJsonLength(1);
+      });
+    });
 
-    describe('Get exercise set by id', () => {});
+    describe('Get exercise set by id', () => {
+      it('should get exercise set by id', () => {
+        return pactum
+          .spec()
+          .get(
+            '/workoutday/{dayId}/exercise/{exerciseId}/exerciseset/{exerciseSetId}',
+          )
+          .withPathParams({
+            dayId: '$S{workoutDayId}',
+            exerciseId: '$S{exerciseId}',
+            exerciseSetId: '$S{exerciseSetId}',
+          })
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .expectStatus(200)
+          .expectBodyContains('$S{exerciseSetId}');
+      });
+    });
 
-    describe('Edit exercise set', () => {});
-
-    describe('Delete exercise set', () => {});
+    describe('Delete exercise set by id', () => {
+      it('should delete exercise set by id', () => {
+        return pactum
+          .spec()
+          .delete(
+            '/workoutday/{dayId}/exercise/{exerciseId}/exerciseset/{exerciseSetId}',
+          )
+          .withPathParams({
+            dayId: '$S{workoutDayId}',
+            exerciseId: '$S{exerciseId}',
+            exerciseSetId: '$S{exerciseSetId}',
+          })
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .expectStatus(204);
+      });
+    });
   });
 });
