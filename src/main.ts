@@ -7,9 +7,13 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      transform: true, // Automatically transform payloads to DTO instances
+      transform: true, //
     }),
   );
+  app.enableCors({
+    origin: '*',
+  });
+
   await app.listen(process.env.PORT ?? 3333);
 }
 bootstrap();
