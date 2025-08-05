@@ -17,7 +17,7 @@
     "prisma:prod:deploy": "dotenv -e .env.prod -- prisma migrate deploy",
     "prisma:prod:generate": "dotenv -e .env.prod -- prisma generate",
     "prisma:prod:studio": "dotenv -e .env.prod -- prisma studio",
-    "build": "prisma migrate deploy && nest build",
+    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
